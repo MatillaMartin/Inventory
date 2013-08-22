@@ -1,16 +1,19 @@
 class UIControl  //controls the User Interface. Everything is encapsulated here. Should implement an interface!
 {
   private ControlP5 cp5;
+  private InventorySkeleton system;
   private ButtonMatrix bm;
   private int buttonMatrixValue = 2;  //asign value 2 to all buttons in buttonmatrix
-  private Product showingProduct;
+  private Product currentProduct;
   private Textfield searchName;
-  private Button createInfo, showName, modifyInfo, deleteInfo;
+  private Button createProduct, showName, modifyProduct, deleteProduct;
   private Textarea info;
+  private boolean modifyingInfo = false;
   private boolean buttonMatrixVisible = false;
-  public UIControl(PApplet app)
+  public UIControl(PApplet app, InventorySkeleton system)
   {
     cp5 = new ControlP5(app);
+    this.system = system;
     initUI();
   }
   private int w(float coeff){return int(coeff*width);}
@@ -58,7 +61,7 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
                     .setLineHeight(20)
                       ;
 
-    createInfo = cp5.addButton("createProduct")
+    createProduct = cp5.addButton("createProduct")
       .setPosition(cx, cy)
         .setSize(cw, ch)
           .setId(0)
@@ -72,14 +75,14 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
             .setVisible(false)
               ;
 
-    deleteInfo = cp5.addButton("deleteProduct")
+    deleteProduct = cp5.addButton("deleteProduct")
       .setPosition(dx, dy)
         .setSize(dw, dh)
           .setId(0) //ID 0 represents system operations to distinguish from selection buttons
             .setVisible(false)
               ;
 
-    modifyInfo = cp5.addButton("modifyProduct")
+    modifyProduct = cp5.addButton("modifyProduct")
       .setPosition(modx, mody)
         .setSize(modw, modh)
           .setId(0)  //ID 0 represents system operations
@@ -93,18 +96,65 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
   
   public void keyPressed()
   {
-    print(key);
+    if(modifyingInfo)
+    {
+      String infoString = currentProduct.getInfo();
+      if(keyCode == BACKSPACE)
+      {
+        currentProduct.setInfo(infoString.substring(0,infoString.length()-1));
+      }
+      else currentProduct.setInfo(""+infoString+key);
+      info.setText(currentProduct.getInfo());
+    }
   }
   public void controlEvent(ControlEvent theEvent)
   {
     if(theEvent.controller().name().equals("searchName"))
     {
-      bm.addButtonList(db.find(theEvent.controller().stringValue())); // search in db text from the search bar and show it as a buttonmatrix 
+      system.onSearch(theEvent.controller().stringValue()); // tell the system there has been a search 
+    }
+    else if(theEvent.controller().name().equals("modifyProduct"))
+    {
+      system.onModify(currentProduct);  // tell the system that the product is going to be modified 
+    }
+    else if(theEvent.controller().name().equals("deleteProduct"))
+    {
+      system.onDelete(currentProduct);  // tell the system that the product is going to be deleted
+    }
+    else if(theEvent.controller().name().equals("createProduct"))
+    {
+      system.onCreate(searchName.getText());  // tell the system that the product is going to be deleted
     }
     else if(theEvent.controller().value() == buttonMatrixValue)
     {
-      //print(theEvent.controller().getId());
-    }
-    
+      println("Controller Id: " + theEvent.controller().getId());
+      system.onResultSelect(theEvent.controller().getId());
+    } 
+  }
+  public void showSearchResults(ArrayList results)
+  {
+    bm.clear();
+    bm.addButtonList(results);
+  }
+  public void showProduct(Product product)
+  {
+    currentProduct = product;
+    info.setText(product.getInfo());
+    showName.setLabel(product.getName());
+    setProductButtonsVisible(true);
+  }
+  private void setProductButtonsVisible(boolean state)
+  {
+    showName.setVisible(state);
+    modifyProduct.setVisible(state);
+    deleteProduct.setVisible(state);
+  }
+  public void setCreateProductVisible(boolean state)
+  {
+    createProduct.setVisible(state);
+  }
+  public void toggleModify()
+  {
+    modifyingInfo = !modifyingInfo;
   }
 }

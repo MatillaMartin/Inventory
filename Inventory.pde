@@ -8,8 +8,9 @@ System system;
 void setup()
 {
   size(1000,600);
+  system = new System();
   //generate User Interface Control
-  uic = new UIControl(this);
+  uic = new UIControl(this, system);
   //generate Database
   db = new Database(this, "aessProd.txt", "|", 6, 0); //0 -> local file, 1 -> local database (mysql)
 }

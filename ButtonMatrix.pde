@@ -17,14 +17,16 @@ class ButtonMatrix{ //generates a Matrix of Buttons, given by an array of String
   public void addButton(String name)
   {
     Button b = new Button(cp5, name);
+    b.setBroadcast(false); // turn broadcast off so it doesnt auto-trigger
     b.setValue(float(value));
     b.setId(lastId);
     lastId++;
     b.setWidth(buttonWidth);
     b.setHeight(buttonHeight);
     b.setPosition(x0 + colMargin + (colMargin+buttonWidth)*(buttons.size()%cols), y0 + rowMargin + int(buttons.size()/cols)*(buttonHeight+rowMargin));
+    b.setBroadcast(true); // turn broadcast on again
     buttons.add(b);
-    println(buttons.size());
+    println("Buttons Created: " +  buttons.size());
   }
   public void addButtonList(ArrayList stringList)
   {
@@ -42,7 +44,7 @@ class ButtonMatrix{ //generates a Matrix of Buttons, given by an array of String
     }
     lastId = 0;
   }
-  public void deleteButton()
+  private void deleteButton()
   {
     cp5.remove(buttons.remove(buttons.size()-1).getName());
     lastId--;

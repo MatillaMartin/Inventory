@@ -13,7 +13,7 @@ public class Database  //encapsulates a database (file or mysql) to ease the use
   private String database = "productdb";
   private String table = "db";
   //LOCAL VARIABLES
-  ArrayList <Product> lastSearch = null;
+  ArrayList <Product> lastSearch;
   
   public Database()
   {
@@ -107,22 +107,23 @@ public class Database  //encapsulates a database (file or mysql) to ease the use
   }
   public Product get(int index)
   {
+    println("lastSearch: " + lastSearch.size());
     if(lastSearch.size() > index)
     {
       return lastSearch.get(index);
     }
     return null;
   }
-  public Database delete(String name)
+  public Database delete(Product product)
   {
-    p.remove(name);
+    p.remove(product);
     saveDatabase();
     return this;
   }
   public ArrayList find(String tip)//TBC
   {
     String[] tips = split(tip, " ");
-    ArrayList ret = new ArrayList<Product>();
+    lastSearch = new ArrayList<Product>();
     for (Product product : p)
     {
       String[] ks = split(product.getName(), " ");
@@ -132,12 +133,12 @@ public class Database  //encapsulates a database (file or mysql) to ease the use
         {
           if(stringsMatch(kpart,tippart))
           {
-            if(!ret.contains(product)){  ret.add(product);}
+            if(!lastSearch.contains(product)){  lastSearch.add(product);}
           }
         }
       }
     }
-    return ret;
+    return lastSearch;
   }
   
   private boolean stringsMatch(String a, String b)
