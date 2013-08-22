@@ -6,8 +6,9 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
   private int buttonMatrixValue = 2;  //asign value 2 to all buttons in buttonmatrix
   private Product currentProduct;
   private Textfield searchName;
-  private Button createProduct, showName, modifyProduct, deleteProduct;
-  private Textarea info;
+  private Button createProduct, modifyProduct, deleteProduct;
+  private Textarea info, price, quantity, url;
+  private Button showName, priceLabel, quantityLabel, urlLabel;
   private boolean modifyingInfo = false;
   private boolean buttonMatrixVisible = false;
   public UIControl(PApplet app, InventorySkeleton system)
@@ -16,28 +17,51 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
     this.system = system;
     initUI();
   }
-  private int w(float coeff){return int(coeff*width);}
-  private int h(float coeff){return int(coeff*height);}
+  private int w(float coeff) {
+    return int(coeff*width);
+  }
+  private int h(float coeff) {
+    return int(coeff*height);
+  }
   private void initUI()
   {
     float searchnamex = .2, searchnamey = .05, searchnamew = .3, searchnameh = .05;
     float createx = searchnamex + searchnamew + 0.1/*margin*/, createy = searchnamey, createw = searchnamew/2, createh = searchnameh;
-    float areax = .05, areay = .5, areaw = .9, areah = .4;
+    float areax = .05, areay = .5, areaw = .4, areah = .4;
+    
     float matrixx = .01, matrixy = .2, matrixcm = .01, matrixrm = .01, matrixw = .3, matrixh = .05;
     float deletew = .15, deleteh = .025, deletex = areax+areaw-deletew, deletey = areay+areah;
     float modifyw = deletew, modifyh = deleteh, modifyx = areax+areaw-modifyw-deletew-.005/*margin*/, modifyy = areay+areah;
     float shownamew = deletew, shownameh = deleteh, shownamex = areax, shownamey = areay-shownameh;
 
+        // price, quantity, url
+    float pricex = areax+areaw+.05, pricey = .5, pricew = deletew, priceh = .1;
+    float quantityx = pricex, quantityy = pricey+priceh+.04, quantityw = deletew, quantityh = .1;
+    float urlx = areax+areaw+.05, urly = .8, urlw = .4, urlh = .1;
+
+    float priceLabelw = deletew, priceLabelh = deleteh, priceLabelx = pricex, priceLabely = pricey-priceLabelh;
+    float quantityLabelw = deletew, quantityLabelh = deleteh, quantityLabelx = pricex, quantityLabely = quantityy-priceLabelh;
+    float urlLabelw = deletew, urlLabelh = deleteh, urlLabelx = pricex, urlLabely = urly-priceLabelh;
+        
     int snx = w(searchnamex), sny = h(searchnamey), snw = w(searchnamew), snh = h(searchnameh);
     int cx = w(createx), cy = h(createy), cw = w(createw), ch = h(createh);
     int ax = w(areax), ay = h(areay), aw = w(areaw), ah = h(areah);
+
+    int px = w(pricex), py = h(pricey), pw = w(pricew), ph = h(priceh);
+    int qx = w(quantityx), qy = h(quantityy), qw = w(quantityw), qh = h(quantityh);
+    int ux = w(urlx), uy = h(urly), uw = w(urlw), uh = h(urlh);
+
+    int pLabelx = w(priceLabelx), pLabely = h(priceLabely), pLabelw = w(priceLabelw), pLabelh = h(priceLabelh);
+    int qLabelx = w(quantityLabelx), qLabely = h(quantityLabely), qLabelw = w(quantityLabelw), qLabelh = h(quantityLabelh);
+    int uLabelx = w(urlLabelx), uLabely = h(urlLabely), uLabelw = w(urlLabelw), uLabelh = h(urlLabelh);
+    
     int mx = w(matrixx), my = h(matrixy), mcm = w(matrixcm), mrm = h(matrixrm), mw = w(matrixw), mh = h(matrixh), mc = int(width/(mcm+mw));
     int dx = w(deletex), dy = h(deletey), dw = w(deletew), dh = h(deleteh);
     int modx = w(modifyx), mody = h(modifyy), modw = w(modifyw), modh = h(modifyh);
     int shx = w(shownamex), shy = h(shownamey), shw = w(shownamew), shh = h(shownameh);
-    
-    
-    
+
+
+
     PFont font = createFont("calibri", 20);
 
     searchName = cp5.addTextfield("searchName")
@@ -60,7 +84,47 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
                   .setColorForeground(color(255, 100))
                     .setLineHeight(20)
                       ;
-
+    price = cp5.addTextarea("price")
+      .setPosition(px, py)
+        .setSize(pw, ph)
+          .setFont(font)
+            .setColor(0)  
+              .setLineHeight(14)
+                .setColorBackground(color(255, 100))
+                  .setColorForeground(color(255, 100))
+                    .setLineHeight(20)
+                      ;
+    quantity = cp5.addTextarea("quantity")
+      .setPosition(qx, qy)
+        .setSize(qw, qh)
+          .setFont(font)
+            .setColor(0)  
+              .setLineHeight(14)
+                .setColorBackground(color(255, 100))
+                  .setColorForeground(color(255, 100))
+                    .setLineHeight(20)
+                      ;
+    url = cp5.addTextarea("url")
+      .setPosition(ux, uy)
+        .setSize(uw, uh)
+          .setFont(font)
+            .setColor(0)  
+              .setLineHeight(14)
+                .setColorBackground(color(255, 100))
+                  .setColorForeground(color(255, 100))
+                    .setLineHeight(20)
+                      ;
+    
+    priceLabel = cp5.addButton("Price")
+       .setPosition(pLabelx, pLabely)
+         .setSize(pLabelw, pLabelh);
+     quantityLabel = cp5.addButton("Quantity")
+       .setPosition(qLabelx, qLabely)
+         .setSize(uLabelw, uLabelh);
+     urlLabel = cp5.addButton("URL")
+       .setPosition(uLabelx, uLabely)
+         .setSize(uLabelw, uLabelh);
+     
     createProduct = cp5.addButton("createProduct")
       .setPosition(cx, cy)
         .setSize(cw, ch)
@@ -93,15 +157,15 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
     bm = new ButtonMatrix(cp5, "bm", buttonMatrixValue, mc, mx, my, mcm, mrm, mw, mh);  
     textFont(font);
   }
-  
+
   public void keyPressed()
   {
-    if(modifyingInfo)
+    if (modifyingInfo)
     {
       String infoString = currentProduct.getInfo();
-      if(keyCode == BACKSPACE)
+      if (keyCode == BACKSPACE)
       {
-        currentProduct.setInfo(infoString.substring(0,infoString.length()-1));
+        currentProduct.setInfo(infoString.substring(0, infoString.length()-1));
       }
       else currentProduct.setInfo(""+infoString+key);
       info.setText(currentProduct.getInfo());
@@ -109,27 +173,27 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
   }
   public void controlEvent(ControlEvent theEvent)
   {
-    if(theEvent.controller().name().equals("searchName"))
+    if (theEvent.controller().name().equals("searchName"))
     {
-      system.onSearch(theEvent.controller().stringValue()); // tell the system there has been a search 
+      system.onSearch(theEvent.controller().stringValue()); // tell the system there has been a search
     }
-    else if(theEvent.controller().name().equals("modifyProduct"))
+    else if (theEvent.controller().name().equals("modifyProduct"))
     {
-      system.onModify(currentProduct);  // tell the system that the product is going to be modified 
+      system.onModify(currentProduct);  // tell the system that the product is going to be modified
     }
-    else if(theEvent.controller().name().equals("deleteProduct"))
+    else if (theEvent.controller().name().equals("deleteProduct"))
     {
       system.onDelete(currentProduct);  // tell the system that the product is going to be deleted
     }
-    else if(theEvent.controller().name().equals("createProduct"))
+    else if (theEvent.controller().name().equals("createProduct"))
     {
       system.onCreate(searchName.getText());  // tell the system that the product is going to be deleted
     }
-    else if(theEvent.controller().value() == buttonMatrixValue)
+    else if (theEvent.controller().value() == buttonMatrixValue)
     {
       println("Controller Id: " + theEvent.controller().getId());
       system.onResultSelect(theEvent.controller().getId());
-    } 
+    }
   }
   public void showSearchResults(ArrayList results)
   {
@@ -158,3 +222,4 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
     modifyingInfo = !modifyingInfo;
   }
 }
+
