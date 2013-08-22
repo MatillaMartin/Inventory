@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<elements>
+	<!--TEXFIELDS-->
+	<textfield x = "20" y = "5" w="30" h="5" name = "searchName" autoclear = "false" captionlabel = "SEARCH NAME" captionlabelcolor = "0"></textfield><!--Search Name Textfield-->
+	<!--BUTTONS-->
+	<button x = "60" y = "5" w="15" h="5" name = "createProduct" type = "button"></button><!-- Create Button -->
+	<button x = "80" y = "90" w="15" h="2.5" name = "deleteProduct" type = "button"></button><!-- Delete Button -->
+	<button x = "79.5" y = "90" w="15" h="2.5" name = "modifyProduct" type = "button"></button><!-- Modify Button -->
+	<button x = "5" y = "45" w="15" h="2.5" name = "showName" type = "button"></button><!-- Product Name Button -->
+	<button x = "0" y = "0" w="0" h="0" name = "increase" type = "button"></button><!-- Increase Button -->
+	<button x = "0" y = "0" w="0" h="0" name = "decrease" type = "button"></button><!-- Decrease Button -->
+	<!--TEXTAREAS-->
+	<textarea x = "5" y = "50" w="90" h="40" name = "info" type = "textarea"></textarea><!-- Info Textarea -->
+	<textarea x = "0" y = "0" w="0" h="0" name = "quantity" type = "textarea"></textarea><!-- Quantity Textarea -->
+	<textarea x = "0" y = "0" w="0" h="0" name = "price" type = "textarea"></textarea><!-- Price Textarea -->
+	<textarea x = "0" y = "0" w="0" h="0" name = "url" type = "textarea"></textarea><!-- Webpage Button -->
+</elements>
+<font name = "calibri" size = "20"></font>
