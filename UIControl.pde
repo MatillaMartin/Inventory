@@ -8,7 +8,7 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
   private Textfield searchName;
   private Button createProduct, modifyProduct, deleteProduct;
   private Textarea info, price, quantity, url;
-  private Button showName, priceLabel, quantityLabel, urlLabel;
+  private Button showName, priceLabel, quantityLabel, urlLabel, imageButton;
   private boolean modifyingInfo = false;
   private boolean buttonMatrixVisible = false;
   public UIControl(PApplet app, InventorySkeleton system)
@@ -37,12 +37,16 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
         // price, quantity, url
     float pricex = areax+areaw+.05, pricey = .5, pricew = deletew, priceh = .1;
     float quantityx = pricex, quantityy = pricey+priceh+.04, quantityw = deletew, quantityh = .1;
-    float urlx = areax+areaw+.05, urly = .8, urlw = .4, urlh = .1;
+    float urlx = areax+areaw+.05, urly = .8, urlw = deletew, urlh = .1;
 
     float priceLabelw = deletew, priceLabelh = deleteh, priceLabelx = pricex, priceLabely = pricey-priceLabelh;
     float quantityLabelw = deletew, quantityLabelh = deleteh, quantityLabelx = pricex, quantityLabely = quantityy-priceLabelh;
     float urlLabelw = deletew, urlLabelh = deleteh, urlLabelx = pricex, urlLabely = urly-priceLabelh;
-        
+    
+    float imagex = pricex+pricew+.05, imagey = pricey, imagew = 1-imagex-.05, imageh = 1-imagey-quantityh;
+    
+    ///////
+    
     int snx = w(searchnamex), sny = h(searchnamey), snw = w(searchnamew), snh = h(searchnameh);
     int cx = w(createx), cy = h(createy), cw = w(createw), ch = h(createh);
     int ax = w(areax), ay = h(areay), aw = w(areaw), ah = h(areah);
@@ -51,6 +55,8 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
     int qx = w(quantityx), qy = h(quantityy), qw = w(quantityw), qh = h(quantityh);
     int ux = w(urlx), uy = h(urly), uw = w(urlw), uh = h(urlh);
 
+    int ix = w(imagex), iy = h(imagey), iw = w(imagew), ih = h(imageh);
+    
     int pLabelx = w(priceLabelx), pLabely = h(priceLabely), pLabelw = w(priceLabelw), pLabelh = h(priceLabelh);
     int qLabelx = w(quantityLabelx), qLabely = h(quantityLabely), qLabelw = w(quantityLabelw), qLabelh = h(quantityLabelh);
     int uLabelx = w(urlLabelx), uLabely = h(urlLabely), uLabelw = w(urlLabelw), uLabelh = h(urlLabelh);
@@ -83,7 +89,8 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
                 .setColorBackground(color(255, 100))
                   .setColorForeground(color(255, 100))
                     .setLineHeight(20)
-                      ;
+                      .setVisible(false)
+                        ;
     price = cp5.addTextarea("price")
       .setPosition(px, py)
         .setSize(pw, ph)
@@ -93,7 +100,8 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
                 .setColorBackground(color(255, 100))
                   .setColorForeground(color(255, 100))
                     .setLineHeight(20)
-                      ;
+                      .setVisible(false)
+                        ;
     quantity = cp5.addTextarea("quantity")
       .setPosition(qx, qy)
         .setSize(qw, qh)
@@ -103,7 +111,8 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
                 .setColorBackground(color(255, 100))
                   .setColorForeground(color(255, 100))
                     .setLineHeight(20)
-                      ;
+                      .setVisible(false)
+                        ;
     url = cp5.addTextarea("url")
       .setPosition(ux, uy)
         .setSize(uw, uh)
@@ -113,39 +122,51 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
                 .setColorBackground(color(255, 100))
                   .setColorForeground(color(255, 100))
                     .setLineHeight(20)
-                      ;
+                      .setVisible(false)
+                        ;
     
     priceLabel = cp5.addButton("Price")
        .setPosition(pLabelx, pLabely)
-         .setSize(pLabelw, pLabelh);
+         .setSize(pLabelw, pLabelh)
+           .setId(0)
+            .setVisible(false)
+            ;
      quantityLabel = cp5.addButton("Quantity")
        .setPosition(qLabelx, qLabely)
-         .setSize(uLabelw, uLabelh);
+         .setSize(uLabelw, uLabelh)
+           .setId(0)
+            .setVisible(false)
+            ;
      urlLabel = cp5.addButton("URL")
        .setPosition(uLabelx, uLabely)
-         .setSize(uLabelw, uLabelh);
-     
+         .setSize(uLabelw, uLabelh)
+           .setId(0)
+            .setVisible(false)
+            ;
+    imageButton = cp5.addButton("image")
+       .setPosition(ix, iy)
+         .setSize(iw, ih)
+           .setId(0)
+            .setVisible(false)
+            ;
     createProduct = cp5.addButton("createProduct")
       .setPosition(cx, cy)
         .setSize(cw, ch)
           .setId(0)
             .setVisible(false)
               ;
-
     showName = cp5.addButton("showName")
       .setPosition(shx, shy)
         .setSize(shw, shh)
           .setId(0)  //ID 0 represents system operations
             .setVisible(false)
               ;
-
     deleteProduct = cp5.addButton("deleteProduct")
       .setPosition(dx, dy)
         .setSize(dw, dh)
           .setId(0) //ID 0 represents system operations to distinguish from selection buttons
             .setVisible(false)
               ;
-
     modifyProduct = cp5.addButton("modifyProduct")
       .setPosition(modx, mody)
         .setSize(modw, modh)
@@ -153,7 +174,6 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
             .setSwitch(true)
               .setVisible(false)
                 ;
-
     bm = new ButtonMatrix(cp5, "bm", buttonMatrixValue, mc, mx, my, mcm, mrm, mw, mh);  
     textFont(font);
   }
@@ -204,14 +224,27 @@ class UIControl  //controls the User Interface. Everything is encapsulated here.
   {
     currentProduct = product;
     info.setText(product.getInfo());
+    price.setText(""+product.getPrice());
+    quantity.setText(""+product.getQuantity());
+    url.setText(product.getUrl());
+    
     showName.setLabel(product.getName());
     setProductButtonsVisible(true);
+    
   }
   private void setProductButtonsVisible(boolean state)
   {
     showName.setVisible(state);
     modifyProduct.setVisible(state);
     deleteProduct.setVisible(state);
+    priceLabel.setVisible(state);
+    quantityLabel.setVisible(state);
+    urlLabel.setVisible(state);
+    info.setVisible(state);
+    price.setVisible(state);
+    quantity.setVisible(state);
+    url.setVisible(state);
+    imageButton.setVisible(state);
   }
   public void setCreateProductVisible(boolean state)
   {

@@ -16,9 +16,9 @@ class Product extends Info
     this.price = price;
     this.imgUrl = imgUrl;
   }
-  public Product(String name, String info, String url, String quantity, String price, String img)
+  public Product(String name, String info, String url, String quantity, String price, String imgUrl)
   {
-    this(name, info, url, Integer.parseInt(quantity),Integer.parseInt(price), img);
+    this(name, info, url, Integer.parseInt(quantity),Integer.parseInt(price), imgUrl);
   }
   
   public int increase(){ return ++quantity;}
